@@ -37,6 +37,17 @@ def stream(video_stream):
                     break
                 yield chunk
 
+@app.get("/api/")
+def getApiInfo():
+    return {
+        "/api/info": "Muestra la información de un video proporcionada por la libreria",
+        "/api/audio": "Descarga el video en formato mp3",
+        "/api/video": "Descarga el video en formato mp4 con la mejor calidad",
+        "/api/video_low": "Descarga el video en formato mp4 con la peor calidad",
+        "/api/stream/video": "Abre el video en formato de stream en el servidor",
+        "/api/stream/audio": "Abre el audio del video en formato de stream en el servidor"
+    }
+
 @app.get("/api/info")
 def getYouTube(link: str):
     youtubeObject = YouTube(link)
@@ -59,6 +70,12 @@ def getYouTubeAudio(link: str):
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
+    return download(video_stream, "video/mp4", nombre=youtubeObject.title, extension = "mp4")
+
+@app.get("/api/video_low")
+def getYouTubeVideo(link: str):
+    youtubeObject = YouTube(link)
+    video_stream = youtubeObject.streams.get_lowest_resolution()
     return download(video_stream, "video/mp4", nombre=youtubeObject.title, extension = "mp4")
 
 @app.get("/api/stream/video")
