@@ -39,7 +39,7 @@ def generate2(video_stream, _media_type):
 
     response = Response(content=video_data, media_type=_media_type)
     name = video_stream.title
-    ext = video_stream.subtype
+    ext = "." + video_stream.subtype
     response.headers["Content-Disposition"] = "attachment; filename=" + name + ext
     
     return response
