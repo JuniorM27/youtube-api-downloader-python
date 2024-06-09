@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse, FileResponse
 from pytube import YouTube
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,10 +28,10 @@ def getYouTube(link: str):
 def getYouTubeAudio(link: str):
     youtubeObject = YouTube(link)
     audio_stream = youtubeObject.streams.get_audio_only()
-    return FileResponse(audio_stream.download(output_path="temp", filename=youtubeObject.title), filename=f"{youtubeObject.title}.mp4", media_type="application/octet-stream")
+    return StreamingResponse(audio_stream.stream(), media_type="audio/mp4")
 
 @app.get("/api/video")
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
-    return FileResponse(video_stream.download(output_path="temp", filename=youtubeObject.title), filename=f"{youtubeObject.title}.mp4", media_type="application/octet-stream")
+    return StreamingResponse(video_stream.stream(), media_type="video/mp4")
