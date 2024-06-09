@@ -29,7 +29,7 @@ def getYouTube(link: str):
 def getYouTubeAudio(link: str):
     youtubeObject = YouTube(link)
     audio_stream = youtubeObject.streams.get_audio_only()
-    return generate2(audio_stream, "audio/mp3", audio_stream.title, audio_stream.subtype)
+    return generate2(audio_stream, "audio/mp3", youtubeObject.title)
 
 def generate2(video_stream, _media_type, title="video", ext="mp4"):
     video_buffer = io.BytesIO()
@@ -56,7 +56,7 @@ def generate(video_stream):
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
-    return generate2(video_stream, "video/mp4", video_stream.title, video_stream.subtype)
+    return generate2(video_stream, "video/mp4", youtubeObject.title)
 
 @app.get("/api/stream/video")
 def getYouTubeStreamVideo(link: str):
