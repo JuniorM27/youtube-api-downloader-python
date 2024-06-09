@@ -51,15 +51,13 @@ def getYouTube(link: str):
 def getYouTubeAudio(link: str):
     youtubeObject = YouTube(link)
     audio_stream = youtubeObject.streams.get_audio_only()
-    print(youtubeObject.title)
-    return download(audio_stream, "audio/mp3", nombre = youtubeObject.title, extension = "mp3")
+    return download(audio_stream, "audio/mp3", nombre=youtubeObject.title.encode().decode(), extension = "mp3")
 
 @app.get("/api/video")
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
-    print(youtubeObject.title)
-    return download(video_stream, "video/mp4", nombre = youtubeObject.title, extension = "mp4")
+    return download(video_stream, "video/mp4", nombre=youtubeObject.title.encode().decode(), extension = "mp4")
 
 @app.get("/api/stream/video")
 def getYouTubeStreamVideo(link: str):
