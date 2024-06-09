@@ -14,31 +14,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def download(video_stream, mediaType, title="video", extension="mp4"):
-    video_buffer = io.BytesIO()
-    video_stream.stream_to_buffer(video_buffer)
-    video_buffer.seek(0)
-    video_data = video_buffer.getvalue()
-    return FileResponse(io.BytesIO(video_data), media_type=mediaType, filename=f"{title}.{extension}")
-
-def downloadVideo(video_stream):
+def download(video_stream, mediaType, nombre = "audio", extension = "mp3"):
     video_buffer = io.BytesIO()
     video_stream.stream_to_buffer(video_buffer)
     video_buffer.seek(0)
     video_data = video_buffer.getvalue()
 
-    response = Response(content=video_data, media_type="video/mp4")
-    response.headers["Content-Disposition"] = f"attachment; filename=video.mp4"
-    return response
-
-def downloadAudio(video_stream):
-    video_buffer = io.BytesIO()
-    video_stream.stream_to_buffer(video_buffer)
-    video_buffer.seek(0)
-    video_data = video_buffer.getvalue()
-
-    response = Response(content=video_data, media_type="audio/mp3")
-    response.headers["Content-Disposition"] = f"attachment; filename=audio.mp3"
+    response = Response(content=video_data, media_type=mediaType)
+    response.headers["Content-Disposition"] = f"attachment; filename={nombre}.{extension}"
     return response
 
 
@@ -68,14 +51,13 @@ def getYouTube(link: str):
 def getYouTubeAudio(link: str):
     youtubeObject = YouTube(link)
     audio_stream = youtubeObject.streams.get_audio_only()
-    return download(audio_stream, "audio/mp3", audio_stream.title, audio_stream.subtype)
-
+    return download(audio_stream, "audio/mp3", nombre = youtubeObject.title, extension = "mp3")
 
 @app.get("/api/video")
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
-    return download(video_stream, "video/mp4", video_stream.title, video_stream.subtype)
+    return download(video_stream, "video/mp4", nombre = youtubeObject.title, extension = "mp4")
 
 @app.get("/api/stream/video")
 def getYouTubeStreamVideo(link: str):
