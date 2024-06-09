@@ -14,6 +14,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def download(video_stream, mediaType, title="video", extension="mp4"):
+    video_buffer = io.BytesIO()
+    video_stream.stream_to_buffer(video_buffer)
+    video_buffer.seek(0)
+    video_data = video_buffer.getvalue()
+    return FileResponse(io.BytesIO(video_data), media_type=mediaType, filename=f"{title}.{extension}")
+
 def downloadVideo(video_stream):
     video_buffer = io.BytesIO()
     video_stream.stream_to_buffer(video_buffer)
@@ -61,14 +68,14 @@ def getYouTube(link: str):
 def getYouTubeAudio(link: str):
     youtubeObject = YouTube(link)
     audio_stream = youtubeObject.streams.get_audio_only()
-    return downloadAudio(audio_stream)
+    return download(audio_stream, "audio/mp3", audio_stream.title, audio_stream.subtype)
 
 
 @app.get("/api/video")
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
-    return downloadVideo(video_stream)
+    return download(video_stream, "video/mp4", video_stream.title, video_stream.subtype)
 
 @app.get("/api/stream/video")
 def getYouTubeStreamVideo(link: str):
