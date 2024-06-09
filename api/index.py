@@ -4,11 +4,8 @@ from pytube import YouTube
 from fastapi.middleware.cors import CORSMiddleware
 import io
 from unidecode import unidecode
-import uvicorn
 
 app = FastAPI()
-
-uvicorn.Config(app, timeout_keep_alive=60)
 
 app.add_middleware(
     CORSMiddleware,
