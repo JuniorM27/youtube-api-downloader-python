@@ -3,16 +3,12 @@ from pytube import YouTube
 
 app = FastAPI()
 
-@app.get("/api/video/{link}")
-def getYouTubeAudio(self, link: str):
+@app.get("/api/video")
+def getYouTube(link: str):
     youtubeObject = YouTube(link)
     print(youtubeObject)
-    if len(link) == 0:
-        return {"error": "Link required!"}
-    elif youtubeObject is None:
-        return {"error": "Not Found!"}
-    else:
-        return {
-            "audio": youtubeObject.streams.get_audio_only(),
-            "video": youtubeObject.streams.get_highest_resolution()
-        }
+    return {
+        "audio": youtubeObject.streams.get_audio_only(),
+        "video_low": youtubeObject.streams.get_lowest_resolution(),
+        "video_high": youtubeObject.streams.get_highest_resolution()
+    }
