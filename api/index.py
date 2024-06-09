@@ -37,7 +37,7 @@ def stream(video_stream):
                     break
                 yield chunk
 
-@app.get("/api/")
+@app.get("/api")
 def getApiInfo():
     return {
         "/api/info": "Muestra la información de un video proporcionada por la libreria",
