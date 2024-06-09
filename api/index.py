@@ -13,7 +13,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/api/video")
+@app.get("/api/info")
 def getYouTube(link: str):
     youtubeObject = YouTube(link)
 
@@ -23,3 +23,13 @@ def getYouTube(link: str):
         "video_low": FileResponse(youtubeObject.streams.get_lowest_resolution(), filename=youtubeObject.title, media_type="application/octet-stream"),
         "video_high": FileResponse(youtubeObject.streams.get_highest_resolution(), filename=youtubeObject.title, media_type="application/octet-stream")
     }
+
+@app.get("/api/audio")
+def getYouTubeAudio(link: str):
+    youtubeObject = YouTube(link)
+    return FileResponse(youtubeObject.streams.get_audio_only(), filename=youtubeObject.title, media_type="application/octet-stream"),
+
+@app.get("/api/video")
+def getYouTubeVideo(link: str):
+    youtubeObject = YouTube(link)
+    return FileResponse(youtubeObject.streams.get_highest_resolution(), filename=youtubeObject.title, media_type="application/octet-stream"),
