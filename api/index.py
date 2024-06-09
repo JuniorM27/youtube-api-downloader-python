@@ -57,3 +57,15 @@ def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
     return generate2(video_stream, "video/mp4")
+
+@app.get("/api/stream/video")
+def getYouTubeStreamVideo(link: str):
+    youtubeObject = YouTube(link)
+    video_stream = youtubeObject.streams.get_highest_resolution()
+    return StreamingResponse(generate(video_stream), media_type="video/mp4")
+
+@app.get("/api/stream/audio")
+def getYouTubeStreamAudio(link: str):
+    youtubeObject = YouTube(link)
+    video_stream = youtubeObject.streams.get_audio_only()
+    return StreamingResponse(generate(video_stream), media_type="video/mp4")
