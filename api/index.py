@@ -29,16 +29,16 @@ def getYouTube(link: str):
 def getYouTubeAudio(link: str):
     youtubeObject = YouTube(link)
     audio_stream = youtubeObject.streams.get_audio_only()
-    return generate2(audio_stream, "audio/mp3", youtubeObject.title)
+    return generate2(audio_stream, "audio/mp3")
 
-def generate2(video_stream, _media_type, title="video", ext="mp4"):
+def generate2(video_stream, _media_type):
     video_buffer = io.BytesIO()
     video_stream.stream_to_buffer(video_buffer)
     video_buffer.seek(0)
     video_data = video_buffer.getvalue()
 
     response = Response(content=video_data, media_type=_media_type)
-    response.headers["Content-Disposition"] = "attachment; filename="+ title +"."+ ext
+    response.headers["Content-Disposition"] = "attachment; filename=video.mp4"
     
     return response
 
@@ -56,7 +56,7 @@ def generate(video_stream):
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
-    return generate2(video_stream, "video/mp4", youtubeObject.title)
+    return generate2(video_stream, "video/mp4")
 
 @app.get("/api/stream/video")
 def getYouTubeStreamVideo(link: str):
