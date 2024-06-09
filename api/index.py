@@ -28,10 +28,10 @@ def getYouTube(link: str):
 def getYouTubeAudio(link: str):
     youtubeObject = YouTube(link)
     audio_stream = youtubeObject.streams.get_audio_only()
-    return StreamingResponse(audio_stream.stream(), media_type="audio/mp4")
+    return StreamingResponse(audio_stream, media_type="audio/mp4")
 
 @app.get("/api/video")
 def getYouTubeVideo(link: str):
     youtubeObject = YouTube(link)
     video_stream = youtubeObject.streams.get_highest_resolution()
-    return StreamingResponse(video_stream.stream(), media_type="video/mp4")
+    return StreamingResponse(video_stream, media_type="video/mp4")
