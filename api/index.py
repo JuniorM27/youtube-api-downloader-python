@@ -38,7 +38,9 @@ def generate2(video_stream, _media_type):
     video_data = video_buffer.getvalue()
 
     response = Response(content=video_data, media_type=_media_type)
-    response.headers["Content-Disposition"] = "attachment; filename=video.mp4"
+    name = video_stream.title
+    ext = video_stream.subtype
+    response.headers["Content-Disposition"] = "attachment; filename=" + name + ext
     
     return response
 
